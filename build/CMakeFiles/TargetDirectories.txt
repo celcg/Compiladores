@@ -1,0 +1,3 @@
+/home/celtia/Documentos/COMP/proy1/build/CMakeFiles/proy1.dir
+/home/celtia/Documentos/COMP/proy1/build/CMakeFiles/edit_cache.dir
+/home/celtia/Documentos/COMP/proy1/build/CMakeFiles/rebuild_cache.dir

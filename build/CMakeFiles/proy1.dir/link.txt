@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/proy1.dir/main.c.o CMakeFiles/proy1.dir/abb.c.o CMakeFiles/proy1.dir/analisisLexico.c.o CMakeFiles/proy1.dir/analisisSintactico.c.o CMakeFiles/proy1.dir/tablaSimbolos.c.o -o proy1 
