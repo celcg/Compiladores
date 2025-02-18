@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/proy1.dir/analisisLexico.c.o.d"
   "CMakeFiles/proy1.dir/analisisSintactico.c.o"
   "CMakeFiles/proy1.dir/analisisSintactico.c.o.d"
+  "CMakeFiles/proy1.dir/automata.c.o"
+  "CMakeFiles/proy1.dir/automata.c.o.d"
   "CMakeFiles/proy1.dir/main.c.o"
   "CMakeFiles/proy1.dir/main.c.o.d"
   "CMakeFiles/proy1.dir/tablaSimbolos.c.o"

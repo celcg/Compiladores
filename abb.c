@@ -1,11 +1,12 @@
-#include "abb.h"
+ #include "abb.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 ///////////////////////// ESTRUCTURAS DE DATOS
+TABB Arbol;
 
 struct celda {
-    TIPOELEMENTOABB info;
+    ElemTS info;
     struct celda *izq, *der;
 };
 
@@ -17,7 +18,7 @@ struct celda {
 
 /*Extraer la clave de una celda */
 //Si es orden alfabetico
-TIPOCLAVE _clave_elem(TIPOELEMENTOABB *E) {
+TIPOCLAVE _clave_elem(ElemTS *E) {
     return E->lexema;
 }
 
@@ -33,7 +34,7 @@ int _comparar_claves(TIPOCLAVE cl1, TIPOCLAVE cl2) {
 /* Si tipoelem tiene alguna estructura que necesite 
  * destruirse ha de hacerse aqui. El uso de esta funcion
  * permite hacer mas eficiente la destruccion del arbol.*/
-void _destruir_elem(TIPOELEMENTOABB *E) {
+void _destruir_elem(ElemTS *E) {
     free(E->lexema); // Liberar memoria
 }
 
@@ -43,23 +44,32 @@ void _destruir_elem(TIPOELEMENTOABB *E) {
 
 //OPERACIONES DE CREACIÓN Y DESTRUCCIÓN
 
-void crearAbb(TABB *A) {
-    *A = NULL;
+void crearAbb() {
+    Arbol = NULL;
 }
 
-void destruirAbb(TABB *A) {
+void destruirAbbRec(TABB *A) {
     if (*A != NULL) {
-        destruirAbb(&(*A)->izq);
-        destruirAbb(&(*A)->der);
+        destruirAbbRec(&(*A)->izq);
+        destruirAbbRec(&(*A)->der);
         _destruir_elem(&((*A)->info));
         free(*A);
         *A = NULL;
     }
 }
+void destruirAbb() {
+    if (Arbol != NULL) {
+        destruirAbbRec(&Arbol);
+    }
+}
+
 
 //OPERACIONES DE INFORMACIÓN
 
-unsigned esAbbVacio(TABB A) {
+unsigned esAbbVacio() {
+    return Arbol == NULL;
+}
+unsigned _esAbbVacio(TABB A) {
     return A == NULL;
 }
 
@@ -71,77 +81,101 @@ TABB derAbb(TABB A) {
     return A->der;
 }
 
-void leerElementoAbb(TABB A, TIPOELEMENTOABB *E) {
+void leerElementoAbb(TABB A, ElemTS *E) {
     *E = A->info;
 }
 // Función privada para comparar las claves
 
-int comparar_clave_elem(TIPOCLAVE cl, TIPOELEMENTOABB E) {
+int comparar_clave_elem(TIPOCLAVE cl, ElemTS E) {
     return _comparar_claves(cl, _clave_elem(&E));
 }
 //Función privada para informar si una clave está en el árbol
 
 unsigned es_miembro_clave(TABB A, TIPOCLAVE cl) {
-    if (esAbbVacio(A)) {
+    if (A == NULL) {  // Si la celda actual es NULL, el árbol está vacío en ese punto
         return 0;
     }
     int comp = comparar_clave_elem(cl, A->info);
 
-    if (comp == 0) { //cl == A->info
+    if (comp == 0) { // cl == A->info
         return 1;
     }
-    if (comp > 0) { //cl > A->info
+    if (comp > 0) { // cl > A->info
         return es_miembro_clave(derAbb(A), cl);
     }
-    //cl < A->info
+    // cl < A->info
     return es_miembro_clave(izqAbb(A), cl);
 }
 
 //Funciones públicas
 
-unsigned esMiembroAbb(TABB A, TIPOELEMENTOABB E) {
-    return es_miembro_clave(A, _clave_elem(&E));
+unsigned esMiembroAbb(ElemTS E) {
+    return es_miembro_clave(Arbol, _clave_elem(&E));
 }
 
-void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo) {
-    if (esAbbVacio(A)) {
+
+void buscarNodoAbbRec(TABB A, TIPOCLAVE cl, ElemTS *nodo) {
+    if (A == NULL) {  // Si llegamos a un nodo vacío, terminamos la búsqueda
         return;
     }
+
     int comp = comparar_clave_elem(cl, A->info);
 
-    if (comp == 0) { // cl == A->info
+    if (comp == 0) {  // Si encontramos el nodo, lo almacenamos
         *nodo = A->info;
-    } else if (comp < 0) { // cl < A->info
-        buscarNodoAbb(A->izq, cl, nodo);
-    } else { // cl > A->info
-        buscarNodoAbb(A->der, cl, nodo);
+        return;
+    }
+
+    // Si la clave es menor, buscamos en el subárbol izquierdo
+    if (comp < 0) {
+        buscarNodoAbbRec(A->izq, cl, nodo);
+    } else {  // Si la clave es mayor, buscamos en el subárbol derecho
+        buscarNodoAbbRec(A->der, cl, nodo);
     }
 }
+
+void buscarNodoAbb(TIPOCLAVE cl, ElemTS *nodo) {
+    if (Arbol != NULL) {
+        buscarNodoAbbRec(Arbol, cl, nodo);  // Llamamos a la función recursiva
+    }
+}
+
 //OPERACIONES DE MODIFICACIÓN
 
 /* Funcion recursiva para insertar un nuevo nodo 
    en el arbol. Se presupone que no existe un nodo
    con la misma clave en el arbol. */
-void insertarElementoAbb(TABB *A, TIPOELEMENTOABB E) {
-    if (esAbbVacio(*A)) {
-        *A = (TABB) malloc(sizeof (struct celda));
+
+
+void insertarElementoAbbRec(TABB *A, ElemTS E) {
+    if (*A == NULL) {  // Si el árbol o subárbol es vacío, insertamos el nuevo nodo
+        *A = (TABB) malloc(sizeof(struct celda));
         (*A)->info = E;
         (*A)->izq = NULL;
         (*A)->der = NULL;
         return;
     }
+
     TIPOCLAVE cl = _clave_elem(&E);
     int comp = comparar_clave_elem(cl, (*A)->info);
+
+    // Si la clave es mayor, insertamos en el subárbol derecho
     if (comp > 0) {
-        insertarElementoAbb(&(*A)->der, E);
-    } else {
-        insertarElementoAbb(&(*A)->izq, E);
+        insertarElementoAbbRec(&(*A)->der, E);
+    } else {  // Si la clave es menor o igual, insertamos en el subárbol izquierdo
+        insertarElementoAbbRec(&(*A)->izq, E);
     }
 }
+void insertarElementoAbb(ElemTS E) {
+    insertarElementoAbbRec(&Arbol, E);  // Llamamos a la función recursiva con el árbol global
+}
+
+
+
 /* Funcion privada que devuelve mínimo de subárbol dcho */
-TIPOELEMENTOABB _suprimir_min(TABB * A) {//Se devuelve el elemento más a la izquierda
+ ElemTS _suprimir_min(TABB * A) {//Se devuelve el elemento más a la izquierda
     TABB aux;
-    TIPOELEMENTOABB ele;
+    ElemTS ele;
     if (esAbbVacio((*A)->izq)) {//Si izquierda vacía, se devuelve valor nodo actual A
         ele = (*A)->info;
         aux = *A;
@@ -152,44 +186,50 @@ TIPOELEMENTOABB _suprimir_min(TABB * A) {//Se devuelve el elemento más a la izq
         return _suprimir_min(&(*A)->izq); //se vuelve a buscar mínimo rama izquierda
     }
 }
-
-/* Funcion que permite eliminar un nodo del arbol */
-void suprimirElementoAbb(TABB *A, TIPOELEMENTOABB E) {
+void suprimirElementoAbbRec(TABB *A, ElemTS E) {
     TABB aux;
-    if (esAbbVacio(*A)) {
+
+    if (*A == NULL) {  // Si el árbol o subárbol es vacío, terminamos
         return;
     }
 
     TIPOCLAVE cl = _clave_elem(&E);
     int comp = comparar_clave_elem(cl, (*A)->info);
-    if (comp < 0) { //if (E < (*A)->info) {
-        suprimirElementoAbb(&(*A)->izq, E);
-    } else if (comp > 0) { //(E > (*A)->info) {
-        suprimirElementoAbb(&(*A)->der, E);
-    } else if (esAbbVacio((*A)->izq) && esAbbVacio((*A)->der)) {
-        _destruir_elem(&((*A)->info));
-        free(*A);
-        *A = NULL;
-    } else if (esAbbVacio((*A)->izq)) { // pero no es vacio derecha
-        aux = *A;
-        *A = (*A)->der;
-        _destruir_elem(&aux->info);
-        free(aux);
-    } else if (esAbbVacio((*A)->der)) { //pero no es vacio izquierda
-        aux = *A;
-        *A = (*A)->izq;
-        _destruir_elem(&aux->info);
-        free(aux);
-    } else { //ni derecha ni izquierda esta vacio, busco mínimo subárbol derecho
-        _destruir_elem(&(*A)->info); //elimino la info pero no libero el nodo,
-        //pues en su sitio voy a poner el mínimo del subárbol derecho
-        (*A)->info = _suprimir_min(&(*A)->der);
+
+    if (comp < 0) {  // Si la clave es menor, buscamos en el subárbol izquierdo
+        suprimirElementoAbbRec(&(*A)->izq, E);
+    } else if (comp > 0) {  // Si la clave es mayor, buscamos en el subárbol derecho
+        suprimirElementoAbbRec(&(*A)->der, E);
+    } else {  // Si encontramos el nodo a eliminar
+        if (esAbbVacio((*A)->izq) && esAbbVacio((*A)->der)) {  // No tiene hijos
+            _destruir_elem(&((*A)->info));
+            free(*A);
+            *A = NULL;
+        } else if (esAbbVacio((*A)->izq)) {  // Solo tiene hijo derecho
+            aux = *A;
+            *A = (*A)->der;
+            _destruir_elem(&aux->info);
+            free(aux);
+        } else if (esAbbVacio((*A)->der)) {  // Solo tiene hijo izquierdo
+            aux = *A;
+            *A = (*A)->izq;
+            _destruir_elem(&aux->info);
+            free(aux);
+        } else {  // Tiene ambos hijos, reemplazamos por el mínimo del subárbol derecho
+            _destruir_elem(&(*A)->info);  // Eliminamos la info pero no el nodo
+            (*A)->info = _suprimir_min(&(*A)->der);  // Suprimimos el mínimo del subárbol derecho
+        }
     }
 }
 
+void suprimirElementoAbb(ElemTS E) {
+    suprimirElementoAbbRec(&Arbol, E);  // Llamamos a la función recursiva con el árbol global
+}
+
+
 /* Funcion privada para pasar la clave y no tener que
    extraerla del nodo en las llamadas recursivas.*/
-void _modificar(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB nodo) {
+void _modificar(TABB A, TIPOCLAVE cl, ElemTS nodo) {
     if (esAbbVacio(A)) {
         return;
     }
@@ -205,23 +245,28 @@ void _modificar(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB nodo) {
 
 
 /* Permite modificar el nodo extrayendo del mismo la clave */
-void modificarElementoAbb(TABB A, TIPOELEMENTOABB nodo) {
+void modificarElementoAbb(TABB A, ElemTS nodo) {
     TIPOCLAVE cl = _clave_elem(&nodo);
     _modificar(A, cl, nodo);
 }
 
 
-void imprimirAbb(TABB A) {
+
+void imprimirAbbRec(TABB A) {
     if (A != NULL) {
         // Primero recorre el subárbol izquierdo
-        imprimirAbb(izqAbb(A));
+        imprimirAbbRec(izqAbb(A));
 
         // Luego imprime el elemento actual
-        TIPOELEMENTOABB elem;
+        ElemTS elem;
         leerElementoAbb(A, &elem);
         printf("Lexema: %s, Numero: %d\n", elem.lexema, elem.numero);
 
         // Finalmente recorre el subárbol derecho
-        imprimirAbb(derAbb(A));
+        imprimirAbbRec(derAbb(A));
     }
+}
+
+void imprimirAbb() {
+    imprimirAbbRec(Arbol);
 }

@@ -8,9 +8,9 @@
  * @param ts Puntero a la tabla de símbolos que se inicializará.
  * @param palabrasReservadas Array de elementos TIPOELEMENTOABB que contiene las palabras reservadas y sus números.
  */
-void inicializarTablaSimbolos(TablaSimbolos *ts, ElemTS *palabrasReservadas, int cantidad) {
+void inicializarTablaSimbolos( ElemTS *palabrasReservadas, int cantidad) {
     // Inicializa la tabla de simbolos como un arbol binario vacío
-    crearAbb(ts);
+    crearAbb();
 
     // Verifica que palabrasReservadas no sea NULL
     if (palabrasReservadas == NULL) {
@@ -22,14 +22,14 @@ void inicializarTablaSimbolos(TablaSimbolos *ts, ElemTS *palabrasReservadas, int
     for (int i = 0; i < cantidad; i++) {
         // Verifica que lexema no sea NULL
         if (palabrasReservadas[i].lexema != NULL) {
-            insertarEnTablaSimbolos(ts, palabrasReservadas[i]);
+            insertarEnTablaSimbolos(palabrasReservadas[i]);
         } else {
             printf("Error: lexema NULL en la palabra reservada %d\n", i);
         }
     }
 
     // Imprimir la tabla de simbolos
-    imprimirAbb(*ts);
+    imprimirAbb();
 }
 
 /**
@@ -38,7 +38,7 @@ void inicializarTablaSimbolos(TablaSimbolos *ts, ElemTS *palabrasReservadas, int
  * @param lexema Lexema del elemento que se va a insertar
  * @param numero Numero asociado al lexema
  */
-void insertarEnTablaSimbolos(TablaSimbolos *ts, ElemTS elemento) {
+void insertarEnTablaSimbolos( ElemTS elemento) {
     // Verificar si el lexema es NULL
     if (elemento.lexema == NULL) {
         fprintf(stderr, "Error: El lexema no puede ser NULL.\n");
@@ -60,7 +60,7 @@ void insertarEnTablaSimbolos(TablaSimbolos *ts, ElemTS elemento) {
     nuevoElemento.numero = elemento.numero;
 
     // Insertar el nuevo elemento en el árbol
-    insertarElementoAbb(ts, nuevoElemento);
+    insertarElementoAbb(nuevoElemento);
 }
 
 /**
@@ -68,17 +68,17 @@ void insertarEnTablaSimbolos(TablaSimbolos *ts, ElemTS elemento) {
  * por cada elemento (lexemas) y el árbol binario.
  * @param ts Puntero a la tabla de símbolos que se destruirá.
  */
-void destruirTablaSimbolos(TablaSimbolos *ts) {
+void destruirTablaSimbolos() {
     // Verifica que la tabla no esté vacía
-    if (esAbbVacio(*ts)) {
+    if (esAbbVacio()) {
         return;  // Si la tabla está vacía, no hay nada que destruir
     }
 
     // Llamar a la función de destrucción recursiva del árbol
-    destruirAbb(ts);
+    destruirAbb();
 }
 
-void buscarOInsertarEnTablaSimbolos(TablaSimbolos *ts, ElemTS elemento) {
+void buscarOInsertarEnTablaSimbolos(ElemTS elemento) {
     // Verificar si el lexema es NULL
     if (elemento.lexema == NULL) {
         fprintf(stderr, "Error: El lexema no puede ser NULL.\n");
@@ -89,12 +89,12 @@ void buscarOInsertarEnTablaSimbolos(TablaSimbolos *ts, ElemTS elemento) {
     ElemTS encontrado;
 
     // Buscar el elemento en la tabla de símbolos
-    buscarNodoAbb(*ts, elemento.lexema, &encontrado);
+    buscarNodoAbb(elemento.lexema, &encontrado);
 
     // Si el elemento no existe, insertarlo
     if (encontrado.lexema == NULL) {
         // El elemento no se encontró, insertar uno nuevo
-        insertarEnTablaSimbolos(ts, elemento);
+        insertarEnTablaSimbolos(elemento);
     } else {
         // El elemento ya existe, imprimir un mensaje de error o advertencia
         printf("El lexema '%s' ya está presente en la tabla de símbolos con número %d.\n", encontrado.lexema, encontrado.numero);

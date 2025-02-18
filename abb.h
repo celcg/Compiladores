@@ -1,103 +1,56 @@
 #ifndef ABB_H
 #define ABB_H
 
-
-/**
- * Tipo de dato abstracto para arbol binario con clave de
- * ordenacion y elemento de celda.
- */
-
-///////////////////////////////////////INICIO PARTE MODIFICABLE
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-typedef char* TIPOCLAVE;
+///////////////////////// DEFINICIONES DE TIPOS
+
+/* Definimos el tipo de clave como un puntero a char (string) */
+typedef char *TIPOCLAVE;
+
+/* Estructura para los elementos de la tabla de símbolos.
+ * Contiene el lexema (puntero a string) y un número asociado.
+ */
 typedef struct {
-	char *lexema;
-    int numero;
-} TIPOELEMENTOABB;
+	TIPOCLAVE lexema; // Lexema (clave)
+	int numero;       // Número asociado al lexema
+} ElemTS;
 
-
-//////////////////////////////////////////FIN PARTE MODIFICABLE
-		
-typedef struct celda * TABB;//tipo opaco
-
-/////////////////////////////// FUNCIONES
-
-//FUNCIONES DE CREACIÓN Y DESTRUCCIÓN DEL �?RBOL
-/**
- * Crea el arbol vacio.
- * @param A Puntero al arbol. Debe estar inicializado.
+/* Definición de la estructura del árbol binario de búsqueda.
+ * Es un puntero a una celda que contiene un elemento y
+ * punteros a sus subárboles izquierdo y derecho.
  */
-void crearAbb(TABB *A);
+typedef struct celda *TABB;
 
-/**
- * Destruye el arbol recursivamente
- * @param A El arbol que queremos destruir
- */
-void destruirAbb(TABB *A);
+///////////////////////// DECLARACIÓN DE FUNCIONES
 
-//FUNCIONES DE INFORMACIÓN
-/**
- * Comprueba si el arbol esta vacio
- * @param A El arbol binario
- */
-unsigned esAbbVacio(TABB A);
+/* Crea un árbol binario de búsqueda vacío */
+void crearAbb();
 
-/**
- * Devuelve el subarbol izquierdo de A
- * @param A - Arbol original
- */
-TABB izqAbb(TABB A);
-/**
- * Devuelve el subarbol derecho de A
- * @param A - Arbol original
- */
-TABB derAbb(TABB A);
-/**
- * Recupera la informacion de la celda de la raiz del arbol
- * @param A
- * @param E Puntero al nodo que apuntara a la informacion
- */
-void leerElementoAbb(TABB A, TIPOELEMENTOABB *E);
+/* Destruye el árbol binario de búsqueda y libera la memoria */
+void destruirAbb();
 
-/**
- * Comprueba si el elemento <E> existe en el arbol <A>
- * @param A
- * @param E
- */
-unsigned esMiembroAbb(TABB A, TIPOELEMENTOABB E);
+/* Verifica si el árbol binario de búsqueda está vacío */
+unsigned esAbbVacio();
 
-/**
- * Busca un nodo con clave <cl> en el arbol y, si existe
- * modifica el puntero <nodo> para que lo apunte.
- * @param A Arbol binario en el que se busca el nodo.
- * @param cl Clave que se buscara.
- * @param nodo Puntero a un tipoelem.
- */
-void buscarNodoAbb(TABB A, TIPOCLAVE cl, TIPOELEMENTOABB *nodo);
+/* Comprueba si un elemento pertenece al árbol binario de búsqueda */
+unsigned esMiembroAbb(ElemTS E);
 
-//FUNCIONES DE MODIFICACIÓN
-/**
- * Inserta un nuevo nodo en el arbol para el elemento E
- * del que toma su clave. Esta clave no debe existir en
- * el arbol.
- * @param A Arbol binario
- * @param E Informacion del nuevo nodo.
- */
-void insertarElementoAbb(TABB *A, TIPOELEMENTOABB E);
-/**
- * Suprime el nodo del arbol <A>
- * @param A
- * @param E
- */
-void suprimirElementoAbb(TABB *A,TIPOELEMENTOABB E);
-/**
- * Busca el nodo con clave la del nodo y lo modifica.
- * @param A
- * @param nodo
- */
-void modificarElementoAbb(TABB A, TIPOELEMENTOABB nodo);
+/* Inserta un nuevo elemento en el árbol binario de búsqueda */
+void insertarElementoAbb(ElemTS E);
 
-void imprimirAbb(TABB A) ;
-#endif	// ABB_H
+/* Elimina un elemento del árbol binario de búsqueda */
+void suprimirElementoAbb(ElemTS E);
 
+/* Busca un nodo en el árbol binario de búsqueda dado un lexema */
+void buscarNodoAbb(TIPOCLAVE cl, ElemTS *nodo);
+
+/* Modifica un elemento existente en el árbol binario de búsqueda */
+//void modificarElementoAbb(ElemTS nodo);
+
+/* Imprime el contenido del árbol binario de búsqueda en orden */
+void imprimirAbb();
+
+#endif // ABB_H

@@ -79,6 +79,12 @@ build CMakeFiles/proy1.dir/tablaSimbolos.c.o: C_COMPILER__proy1_unscanned_Debug 
   OBJECT_DIR = CMakeFiles/proy1.dir
   OBJECT_FILE_DIR = CMakeFiles/proy1.dir
 
+build CMakeFiles/proy1.dir/automata.c.o: C_COMPILER__proy1_unscanned_Debug /home/celtia/Documentos/COMP/proy1/automata.c || cmake_object_order_depends_target_proy1
+  DEP_FILE = CMakeFiles/proy1.dir/automata.c.o.d
+  FLAGS = -g -std=gnu11 -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/proy1.dir
+  OBJECT_FILE_DIR = CMakeFiles/proy1.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target proy1
@@ -87,7 +93,7 @@ build CMakeFiles/proy1.dir/tablaSimbolos.c.o: C_COMPILER__proy1_unscanned_Debug 
 #############################################
 # Link the executable proy1
 
-build proy1: C_EXECUTABLE_LINKER__proy1_Debug CMakeFiles/proy1.dir/main.c.o CMakeFiles/proy1.dir/abb.c.o CMakeFiles/proy1.dir/analisisLexico.c.o CMakeFiles/proy1.dir/analisisSintactico.c.o CMakeFiles/proy1.dir/tablaSimbolos.c.o
+build proy1: C_EXECUTABLE_LINKER__proy1_Debug CMakeFiles/proy1.dir/main.c.o CMakeFiles/proy1.dir/abb.c.o CMakeFiles/proy1.dir/analisisLexico.c.o CMakeFiles/proy1.dir/analisisSintactico.c.o CMakeFiles/proy1.dir/tablaSimbolos.c.o CMakeFiles/proy1.dir/automata.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/proy1.dir
   POST_BUILD = :

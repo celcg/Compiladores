@@ -12,4 +12,5 @@ add_executable(proy1 main.c
         definiciones.h
         tablaSimbolos.c
         tablaSimbolos.h
-        analisisSintactico.h)
+        analisisSintactico.h
+        automata.c)

@@ -201,6 +201,30 @@ analisisSintactico.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/proy1.dir/build.make CMakeFiles/proy1.dir/analisisSintactico.c.s
 .PHONY : analisisSintactico.c.s
 
+automata.o: automata.c.o
+.PHONY : automata.o
+
+# target to build an object file
+automata.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/proy1.dir/build.make CMakeFiles/proy1.dir/automata.c.o
+.PHONY : automata.c.o
+
+automata.i: automata.c.i
+.PHONY : automata.i
+
+# target to preprocess a source file
+automata.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/proy1.dir/build.make CMakeFiles/proy1.dir/automata.c.i
+.PHONY : automata.c.i
+
+automata.s: automata.c.s
+.PHONY : automata.s
+
+# target to generate assembly for a file
+automata.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/proy1.dir/build.make CMakeFiles/proy1.dir/automata.c.s
+.PHONY : automata.c.s
+
 main.o: main.c.o
 .PHONY : main.o
 
@@ -267,6 +291,9 @@ help:
 	@echo "... analisisSintactico.o"
 	@echo "... analisisSintactico.i"
 	@echo "... analisisSintactico.s"
+	@echo "... automata.o"
+	@echo "... automata.i"
+	@echo "... automata.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

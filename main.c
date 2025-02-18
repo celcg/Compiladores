@@ -5,7 +5,6 @@
 #include "definiciones.h"
 
 int main(void) {
-    TablaSimbolos ts;
     int cantidadP;
     // Inicializa la tabla de símbolos
 
@@ -21,17 +20,17 @@ int main(void) {
         {"go", GO},
         {"make", MAKE},
     };
-    //Utilizo cantidad P para q la fun
+    //Utilizo cantidad P para q la funcion sepa cuantas tiene q recorrer
     cantidadP = sizeof(palabrasReservadas) / sizeof(palabrasReservadas[0]);
 
     // Inicializa la tabla de símbolos con las palabras reservadas
-    inicializarTablaSimbolos(&ts, palabrasReservadas, cantidadP);
+    inicializarTablaSimbolos(palabrasReservadas, cantidadP);
 
    // analisisSintactico();
     printf("Tabla de símbolos inicializada con palabras reservadas.\n");
 
-    destruirTablaSimbolos(&ts);
-    printf("Tabla de símbolos eliminada.\n");
+    destruirTablaSimbolos();
+    printf("Tabla de símbolos eliminadaAAAs.\n");
 
     return 0;
 }
